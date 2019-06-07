@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Business</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Lobster|Quicksand&display=swap" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+</head>
+<body>
+        <div class="w3-content w3-section" style="max-width:500px">
+                <img class="mySlides" src="Achtergrond.jpg" >
+                <img class="mySlides" src="Achtergrond1.jpg">
+                <img class="mySlides" src="Achtergrond2.jpg">
+              </div>
+              <div class="timer" id="time"></div>
+        <div class="col1">                        
+                <div class="OpeningHours_Header">
+                        <span class="OpeningHours__Status">We are</span>
+                        <hr>
+                    </div>
+                </div>
+                <button class="button">Close Early</button>
+            
+            <section class="OpeningHours">
+                    <div class="OpeningHours__Content">
+                        <table class="OpeningHours__Table">
+                            <tr class="Day--Monday" itemprop="openingHours">
+                                <td>Monday</td>
+                                <td class="opens">11:00</td>
+                                <td>-</td>
+                                <td class="closes">15:00</td>
+                            </tr>
+                            <tr class="Day--Tuesday" itemprop="openingHours">
+                                <td>Tuesday</td>
+                                <td class="opens">10:00</td>
+                                <td>-</td>
+                                <td class="closes">15:00</td>
+                            </tr>
+                            <tr class="Day--Tuesday" itemprop="openingHours">
+                                <td></td>
+                                <td class="opens">17:30</td>
+                                <td>-</td>
+                                <td class="closes">20:00</td>
+                            </tr>
+                            <tr class="Day--Wednesday" itemprop="openingHours">
+                                <td>Wednesday</td>
+                                <td class="opens">11:00</td>
+                                <td>-</td>
+                                <td class="closes">15:00</td>
+                            </tr>
+                            <tr class="Day--Thursday" itemprop="openingHours">
+                                <td>Thursday</td>
+                                <td class="opens">11:00</td>
+                                <td>-</td>
+                                <td class="closes">15:00</td>
+                            </tr>
+                            <tr class="Day--Friday" itemprop="openingHours">
+                                <td>Friday</td>
+                                <td class="opens">11:00</td>
+                                <td>-</td>
+                                <td class="closes">15:00</td>
+                            </tr>
+                            <tr class="Day--Friday" itemprop="openingHours">
+                                <td></td>
+                                <td class="opens">16:30</td>
+                                <td>-</td>
+                                <td class="closes">20:00</td>
+                            </tr>
+                            <tr class="Day--Saturday" itemprop="openingHours">
+                                <td>Saturday</td>
+                                <td class="opens">11:00</td>
+                                <td>-</td>
+                                <td class="closes">20:00</td>
+                            </tr>
+                            <tr class="Day--Sunday" itemprop="openingHours">
+                                <td>Sunday</td>
+                                <td colspan=2>Closed
+                                    <span style='display:none' class="opens">24:00</span>
+                                    <span style='display:none' class="closes">24:00</span></td>
+                            </tr>
+                        </table>
+                    </div>
+                </section>
+                                   
+            </div>
+</body>
+<script>
+        (function(){
+            function formatTime(time){
+                var timeSplit = time.split(":"),
+                    timeHours = timeSplit[0];
+         
+                timeHours = timeHours < 10 ? "0" + timeHours : timeHours;
+         
+                return timeHours + timeSplit[1];
+            }
+         
+            var currentDate = new Date(),
+                    weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+                    currentDay = weekday[currentDate.getDay()],
+                    currentTimeHours = currentDate.getHours(),
+                    currentTimeMinutes,
+                    timeNow,
+                    currentDaySelector,
+                    openTimes,
+                    closeTimes,
+                    isOpen = false;
+         
+            currentTimeHours = currentTimeHours < 10 ? "0" + currentTimeHours : currentTimeHours;
+            currentTimeMinutes = currentDate.getMinutes();
+            timeNow = currentTimeHours + "" + currentTimeMinutes;
+         
+            currentDaySelector = ".Day--" + currentDay; //gets today's weekday and turns it into id
+            $(currentDaySelector).toggleClass("Day--Today"); //hightlights today
+         
+            openTimes = $(currentDaySelector).children('.opens').map(function(){
+                return $.trim($(this).text());
+            }).get();
+         
+            closeTimes = $(currentDaySelector).children('.closes').map(function(){
+                return $.trim($(this).text());
+            }).get();
+         
+            $(openTimes).each(function(key, value) {
+                var openTimeFormatted = formatTime(openTimes[key]),
+                        closeTimeFormatted = formatTime(closeTimes[key]);
+         
+                if(timeNow >= openTimeFormatted && timeNow <= closeTimeFormatted) {
+                    isOpen = true;
+                }
+            });
+         
+            if (isOpen) {
+                $(".OpeningHours__Status").toggleClass("OpeningHours__Status--Open");
+            } else {
+                $(".OpeningHours__Status").toggleClass("OpeningHours__Status--Closed");
+            }
+        })();
+
+        var myIndex = 0;
+carousel();
+
+function carousel() {
+  var i;
+  var x = document.getElementsByClassName("mySlides");
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";  
+  }
+  myIndex++;
+  if (myIndex > x.length) {myIndex = 1}    
+  x[myIndex-1].style.display = "block";  
+  setTimeout(carousel, 1800); // Change image every 2 seconds
+}
+
+function checkTime(i) {
+  if (i < 10) {
+    i = "0" + i;
+  }
+  return i;
+}
+
+function startTime() {
+  var today = new Date();
+  var h = today.getHours();
+  var m = today.getMinutes();
+  var s = today.getSeconds();
+  // add a zero in front of numbers<10
+  m = checkTime(m);
+  s = checkTime(s);
+  document.getElementById('time').innerHTML = h + ":" + m + ":" + s;
+  t = setTimeout(function() {
+    startTime()
+  }, 500);
+}
+startTime();
+        </script>
+</html>
